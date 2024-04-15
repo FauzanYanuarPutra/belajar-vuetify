@@ -64,11 +64,17 @@
               <template v-slot:text>
                 <v-label class="text-caption">Name</v-label>
 
-                <v-text-field density="compact" variant="solo-filled" flat></v-text-field>
-
+                <v-text-field density="compact" variant="solo-filled" v-model="title" flat></v-text-field>
+                <p class="text-red text-subtitle-1">
+                  {{errors?.filter((e) => e.id === 'title')[0]?.title}}
+                </p>
+                
                 <v-label class="text-caption">URL</v-label>
 
-                <v-text-field density="compact" variant="solo-filled" flat></v-text-field>
+                <v-text-field density="compact" variant="solo-filled" v-model="href" flat></v-text-field>
+                <p class="text-red text-subtitle-1">
+                  {{errors?.filter((e) => e.id === 'href')[0]?.title}}
+                </p>
               </template>
 
               <div class="py-4 px-5 text-end">
@@ -86,7 +92,7 @@
                   color="blue"
                   text="Done"
                   variant="flat"
-                  @click="dialog = false"
+                  @click="onSubmit"
                 ></v-btn>
               </div>
             </v-card>
@@ -101,6 +107,9 @@
   export default {
     data: () => ({
       dialog: false,
+      title: '',
+      href: '',
+      errors: [],
       items: [
         {
           prependIcon: 'mdi-clock-outline',
@@ -126,11 +135,49 @@
       shortcuts: [
         {
           icon: 'mdi-calendar',
-          title: 'Date ',
+          title: 'Date And Skeleton',
           href: '/date',
-        },
-      
+        }
+  
       ],
     }),
+    methods: {
+      onSubmit() {
+
+        if (!this.title) {
+          if (!this.errors?.filter((e) => e.id === 'title').length > 0) {
+            this.errors.push({
+              id: 'title',
+              title: 'Title harus ada'
+            })
+          }
+        } else {
+          this.errors = this.errors.filter((e) => e.id !== 'title');
+        }
+
+        if (!this.href) {
+          if (!this.errors?.filter((e) => e.id === 'href').length > 0) {
+            this.errors.push({
+              id: 'href',
+              title: 'Href harus ada'
+            })
+          }
+        } else {
+          this.errors = this.errors.filter((e) => e.id !== 'href');
+        }
+
+        // console.log(this.errors)
+
+        if (this.href && this.title) {
+          this.dialog = false;
+
+          this.shortcuts.push({
+            icon: 'mdi-material-ui',
+            title: this.title,
+            href: this.href
+          })
+        }
+      }
+    }
   }
 </script>
