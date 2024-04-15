@@ -21,7 +21,7 @@
             menu-icon=""
             placeholder="Search Google or type a URL"
             prepend-inner-icon="mdi-magnify"
-            style="max-width: 350px;"
+            style="max-width: 600px;"
             theme="light"
             variant="solo"
             auto-select-first
